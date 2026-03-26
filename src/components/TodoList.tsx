@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export type Todo = {
   userId: number;
@@ -15,6 +15,10 @@ type TodoListProps = {
 
 export default function TodoList({ todos }: TodoListProps) {
   const [items, setItems] = useState<Todo[]>(todos);
+
+  useEffect(() => {
+    setItems(todos);
+  }, [todos]);
 
   const hasItems = useMemo(() => items.length > 0, [items.length]);
 
