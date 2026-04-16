@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import TodoList, { type Todo } from "@/components/TodoList";
 
-const TODOS_ENDPOINT = "https://jsonplaceholder.typicode.com/todos?_limit=12";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function TaskManagerPage() {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -14,7 +14,7 @@ export default function TaskManagerPage() {
   useEffect(() => {
     async function loadTodos() {
       try {
-        const response = await fetch(TODOS_ENDPOINT);
+        const response = await fetch(`${API_URL}/todos?_limit=12`);
 
         if (!response.ok) {
           setTodos([]);
