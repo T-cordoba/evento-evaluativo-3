@@ -22,12 +22,23 @@ export default function TodoList({ todos }: TodoListProps) {
 
   const hasItems = useMemo(() => items.length > 0, [items.length]);
 
-  function toggleTodo(id: number) {
+  async function toggleTodo(id: number) {
+    const todo = items.find((t) => t.id === id);
+    if (!todo) return;
+
+    const newCompleted = !todo.completed;
+
     setItems((current) =>
-      current.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo,
+      current.map((t) =>
+        t.id === id ? { ...t, completed: newCompleted } : t,
       ),
     );
+
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/todos/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ completed: newCompleted }),
+    });
   }
 
   if (!hasItems) {
